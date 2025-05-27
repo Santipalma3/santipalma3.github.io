@@ -1,51 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo de Productos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      background: radial-gradient(circle, #f9f9f9, #e0e0e0);
-    }
-    header {
-      background-color: #222;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-    }
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { margin: 0; padding: 0; background: radial-gradient(circle, #f9f9f9, #e0e0e0); }
+    header { background-color: #222; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; }
     .catalogo {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: 1fr;
       gap: 20px;
       padding: 20px;
-      max-width: 1200px;
+      max-width: 700px;
       margin: auto;
     }
-    .producto {
+    .bloque {
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
     }
-    .producto img {
+    .bloque img {
       width: 100%;
       height: auto;
+      display: block;
     }
     .boton-contacto {
       display: block;
-      margin: 1rem;
+      margin: 1rem auto;
+      width: 90%;
       padding: 0.8rem;
       background: #25d366;
       color: white;
@@ -55,19 +41,12 @@
       font-weight: bold;
       transition: background 0.3s;
     }
-    .boton-contacto:hover {
-      background: #1ebc59;
-    }
+    .boton-contacto:hover { background: #1ebc59; }
   </style>
 </head>
 <body>
   <header>Catálogo de Productos</header>
   <section class="catalogo">
-    <!-- Producto de ejemplo -->
-    <div class="producto">
-      <img src="catalogo_imagenes/pagina1_img1.jpeg" alt="Producto 1">
-      <a class="boton-contacto" href="https://wa.me/5493812529038?text=Hola!%20Estoy%20interesado%20en%20un%20producto" target="_blank">Consultar por WhatsApp</a>
-    </div>
   </section>
 </body>
 </html>
