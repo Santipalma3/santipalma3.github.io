@@ -2,121 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cine Virtual</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    select, button {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-    .butacas {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 20px 0;
-      gap: 10px;
-    }
-    .butaca {
-      width: 50px;
-      height: 50px;
-      background: #444;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .butaca:hover {
-      background: #666;
-    }
-    .butaca.seleccionada {
-      background: #00c853;
-    }
-    #qr {
-      margin-top: 20px;
-    }
-    .info {
-      margin-top: 20px;
-      background: rgba(255,255,255,0.1);
-      padding: 15px;
-      border-radius: 10px;
-    }
-  </style>
+  <title>Test QR</title>
 </head>
 <body>
-  <h1>🎬 Cine Virtual</h1>
-
-  <h2>Elige tu película</h2>
-  <select id="pelicula">
-    <option value="Matrix">Matrix</option>
-    <option value="Avatar">Avatar</option>
-    <option value="Inception">Inception</option>
-    <option value="Interstellar">Interstellar</option>
-  </select>
-
-  <h2>Selecciona tu butaca</h2>
-  <div class="butacas" id="butacas"></div>
-
-  <button onclick="generarQR()">Generar Entrada 🎟️</button>
-
-  <div class="info">
-    <p><strong>Precio:</strong> $2500</p>
-    <p><strong>Métodos de pago:</strong> Efectivo, Tarjeta, MercadoPago</p>
-  </div>
-
+  <h1>Prueba QR</h1>
+  <button onclick="generarQR()">Generar QR</button>
   <div id="qr"></div>
 
-  <!-- Librería QR -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Generar butacas del 0 al 30 en orden random
-    const contenedor = document.getElementById("butacas");
-    const numeros = Array.from({length: 31}, (_, i) => i);
-    numeros.sort(() => Math.random() - 0.5);
-
-    let butacaSeleccionada = null;
-
-    numeros.forEach(num => {
-      const div = document.createElement("div");
-      div.classList.add("butaca");
-      div.textContent = num;
-      div.onclick = () => {
-        document.querySelectorAll(".butaca").forEach(b => b.classList.remove("seleccionada"));
-        div.classList.add("seleccionada");
-        butacaSeleccionada = num;
-      };
-      contenedor.appendChild(div);
-    });
-
-    // Generar QR
     function generarQR() {
-      if (!butacaSeleccionada) {
-        alert("Por favor selecciona una butaca");
-        return;
-      }
       document.getElementById("qr").innerHTML = "";
-      const pelicula = document.getElementById("pelicula").value;
-      const data = `Entrada Cine Virtual\nPelícula: ${pelicula}\nButaca: ${butacaSeleccionada}\nPrecio: $2500\nPago: Efectivo/Tarjeta/MercadoPago`;
       new QRCode(document.getElementById("qr"), {
-        text: data,
+        text: "Hola Santi 🚀",
         width: 200,
         height: 200
       });
     }
   </script>
 </body>
+</html>
