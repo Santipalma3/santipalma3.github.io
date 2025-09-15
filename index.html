@@ -7,13 +7,13 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: linear-gradient(135deg, #141e30, #243b55);
       color: white;
       text-align: center;
       padding: 20px;
     }
-    h1 {
-      margin-bottom: 20px;
+    h1, h2 {
+      margin: 15px 0;
     }
     select, button {
       padding: 10px;
@@ -27,11 +27,11 @@
       flex-wrap: wrap;
       justify-content: center;
       margin: 20px 0;
-      gap: 10px;
+      gap: 8px;
     }
     .butaca {
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       background: #444;
       color: white;
       display: flex;
@@ -67,7 +67,16 @@
     <option value="Avatar">Avatar</option>
     <option value="Inception">Inception</option>
     <option value="Interstellar">Interstellar</option>
+    <option value="Titanic">Titanic</option>
+    <option value="Joker">Joker</option>
+    <option value="Toy Story">Toy Story</option>
+    <option value="Avengers: Endgame">Avengers: Endgame</option>
+    <option value="El Señor de los Anillos">El Señor de los Anillos</option>
+    <option value="Harry Potter">Harry Potter</option>
   </select>
+
+  <h2>Selecciona un horario</h2>
+  <select id="horario"></select>
 
   <h2>Selecciona tu butaca</h2>
   <div class="butacas" id="butacas"></div>
@@ -84,6 +93,13 @@
   <!-- Librería QR -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
+    // Cargar horarios de 8 AM a 22 PM cada 2 horas
+    const horarios = document.getElementById("horario");
+    for (let h = 8; h <= 22; h += 2) {
+      let hora = h < 10 ? "0" + h : h;
+      horarios.innerHTML += `<option value="${hora}:00">${hora}:00</option>`;
+    }
+
     // Generar butacas del 0 al 30 en orden random
     const contenedor = document.getElementById("butacas");
     const numeros = Array.from({length: 31}, (_, i) => i);
@@ -103,7 +119,7 @@
       contenedor.appendChild(div);
     });
 
-    // Generar QR
+    // Generar QR con datos de la entrada
     function generarQR() {
       if (!butacaSeleccionada) {
         alert("Por favor selecciona una butaca");
@@ -111,7 +127,8 @@
       }
       document.getElementById("qr").innerHTML = "";
       const pelicula = document.getElementById("pelicula").value;
-      const data = `Entrada Cine Virtual\nPelícula: ${pelicula}\nButaca: ${butacaSeleccionada}\nPrecio: $2500\nPago: Efectivo/Tarjeta/MercadoPago`;
+      const horario = document.getElementById("horario").value;
+      const data = `🎟️ Entrada Cine Virtual\nPelícula: ${pelicula}\nHorario: ${horario}\nButaca: ${butacaSeleccionada}\nPrecio: $2500\nPago: Efectivo/Tarjeta/MercadoPago`;
       new QRCode(document.getElementById("qr"), {
         text: data,
         width: 200,
