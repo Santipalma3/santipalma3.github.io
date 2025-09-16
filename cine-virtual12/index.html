@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cine Virtual</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 20px;
+    }
+    header h1 {
+      margin: 0;
+    }
+    header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+    }
+    .pelicula {
+      background: #fff;
+      margin: 20px auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 700px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .pelicula img {
+      width: 100%;
+      max-height: 350px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .asientos {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 5px;
+      margin: 15px 0;
+    }
+    .asiento {
+      background: #4caf50;
+      color: white;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .asiento.ocupado {
+      background: red;
+      cursor: not-allowed;
+    }
+    .asiento.seleccionado {
+      background: blue;
+    }
+    select, button {
+      margin: 10px 0;
+      padding: 8px;
+    }
+    canvas {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Cine Virtual</h1>
+    <p>Dirección: Ingenio La Florida, Tucumán</p>
+  </header>
+
+  <!-- Película -->
+  <div class="pelicula">
+    <h2>Avengers: Endgame</h2>
+    <p>Género: Acción, Ciencia ficción</p>
+    <!-- Imagen externa (no depende de tu carpeta) -->
+    <img src="https://m.media-amazon.com/images/I/81ExhpBEbHL._AC_SY679_.jpg" alt="Avengers Endgame">
+
+    <label for="horario">Elige horario:</label>
+    <select id="horario">
+      <option>08:00</option>
+      <option>10:00</option>
+      <option>12:00</option>
+      <option>14:00</option>
+      <option>16:00</option>
+      <option>18:00</option>
+      <option>20:00</option>
+      <option>22:00</option>
+    </select>
+
+    <h3>Selecciona tu asiento:</h3>
+    <div class="asientos" id="asientos"></div>
+
+    <button id="generarQr">Generar QR</button>
+    <canvas id="qr"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+  <script>
+    const asientosContainer = document.getElementById("asientos");
+    const generarQrBtn = document.getElementById("generarQr");
+    const qrCanvas = document.getElementById("qr");
+    let asientoSeleccionado = null;
+    let qrGenerado = false;
+
+    // Crear asientos 1 a 50
+    for (let i = 1; i <= 50; i++) {
+      const div = document.createElement("div");
+      div.classList.add("asiento");
+      div.textContent = i;
+      div.addEventListener("click", () => seleccionarAsiento(div));
+      asientosContainer.appendChild(div);
+    }
+
+    function seleccionarAsiento(asiento) {
+      if (asiento.classList.contains("ocupado")) return;
+
+      // Solo 1 asiento a la vez
+      if (asientoSeleccionado) {
+        asientoSeleccionado.classList.remove("seleccionado");
+      }
+      asiento.classList.add("seleccionado");
+      asientoSeleccionado = asiento;
+    }
+
+    generarQrBtn.addEventListener("click", () => {
+      if (qrGenerado) {
+        alert("Ya generaste un QR.");
+        return;
+      }
+      if (!asientoSeleccionado) {
+        alert("Debes seleccionar un asiento.");
+        return;
+      }
+
+      const horario = document.getElementById("horario").value;
+      const data = `🎬 Película: Avengers Endgame\n🕒 Horario: ${horario}\n💺 Asiento: ${asientoSeleccionado.textContent}`;
+
+      new QRious({
+        element: qrCanvas,
+        value: data,
+        size: 200
+      });
+
+      // Marcar asiento como ocupado
+      asientoSeleccionado.classList.remove("seleccionado");
+      asientoSeleccionado.classList.add("ocupado");
+      asientoSeleccionado = null;
+
+      qrGenerado = true;
+    });
+  </script>
+</body>
+</html>

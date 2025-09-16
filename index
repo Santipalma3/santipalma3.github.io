@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cine Virtual</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; margin: 0; padding: 0; }
+    header { background: #222; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; }
+    .pelicula { background: #1e1e1e; margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+    .pelicula img { width: 150px; border-radius: 8px; margin-right: 15px; }
+    .info { display: flex; align-items: center; }
+    select, button { margin: 10px 0; padding: 8px; border-radius: 5px; border: none; }
+    button { background: #ff4444; color: white; cursor: pointer; }
+    #qr { margin: 20px auto; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>🎟️ Cine Virtual</header>
+
+  <div id="cartelera"></div>
+
+  <div id="qr"></div>
+
+  <!-- Librería QRCode -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <script>
+    const peliculas = [
+      { titulo: "Oppenheimer", img: "https://m.media-amazon.com/images/I/71tFya4bt7L._AC_SY679_.jpg" },
+      { titulo: "Barbie", img: "https://m.media-amazon.com/images/I/71c1LRLBT-L._AC_SY679_.jpg" },
+      { titulo: "Avatar 2", img: "https://m.media-amazon.com/images/I/81C2N2+8chL._AC_SY679_.jpg" },
+      { titulo: "Super Mario Bros", img: "https://m.media-amazon.com/images/I/91I1mjw+sHL._AC_SY679_.jpg" }
+    ];
+
+    const horarios = ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"];
+
+    // generar butacas del 0 al 50, pero desordenadas
+    let butacas = Array.from({length: 51}, (_, i) => i);
+    butacas = butacas.sort(() => Math.random() - 0.5);
+
+    const carteleraDiv = document.getElementById("cartelera");
+    peliculas.forEach((peli, idx) => {
+      const div = document.createElement("div");
+      div.className = "pelicula";
+      div.innerHTML = `
+        <div class="info">
+          <img src="${peli.img}" alt="${peli.titulo}">
+          <div>
+            <h2>${peli.titulo}</h2>
+            <label>🎬 Horario:</label>
+            <select id="horario-${idx}">
+              ${horarios.map(h => `<option value="${h}">${h}</option>`).join("")}
+            </select><br>
+            <label>💺 Butaca:</label>
+            <select id="butaca-${idx}">
+              ${butacas.map(b => `<option value="${b}">${b}</option>`).join("")}
+            </select><br>
+            <label>💰 Precio:</label>
+            <select id="precio-${idx}">
+              <option value="2000">General $2000</option>
+              <option value="1500">Estudiante $1500</option>
+              <option value="1000">Niños $1000</option>
+            </select><br>
+            <label>💳 Pago:</label>
+            <select id="pago-${idx}">
+              <option value="Efectivo">Efectivo</option>
+              <option value="Tarjeta">Tarjeta</option>
+              <option value="MercadoPago">Mercado Pago</option>
+            </select><br>
+            <button onclick="generarQR(${idx})">Generar Entrada QR</button>
+          </div>
+        </div>
+      `;
+      carteleraDiv.appendChild(div);
+    });
+
+    function generarQR(idx) {
+      if (localStorage.getItem("qrGenerado")) {
+        alert("⚠️ Ya generaste un QR. Solo se permite uno por usuario.");
+        return;
+      }
+
+      const horario = document.getElementById(`horario-${idx}`).value;
+      const butaca = document.getElementById(`butaca-${idx}`).value;
+      const precio = document.getElementById(`precio-${idx}`).value;
+      const pago = document.getElementById(`pago-${idx}`).value;
+      const peli = peliculas[idx].titulo;
+
+      const datos = `🎬 ${peli} | 🕒 ${horario} | 💺 ${butaca} | 💰 $${precio} | Pago: ${pago}`;
+      
+      document.getElementById("qr").innerHTML = "";
+      new QRCode(document.getElementById("qr"), {
+        text: datos,
+        width: 200,
+        height: 200
+      });
+
+      localStorage.setItem("qrGenerado", "true");
+    }
+  </script>
+</body>
+</html>
