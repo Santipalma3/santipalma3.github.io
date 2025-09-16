@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cine Virtual</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #fff;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #0f3460;
+    }
+    h1 { margin: 0; }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: #1a1a2e;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      padding: 15px;
+      text-align: center;
+    }
+    .card img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .card button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #e94560;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .card button:hover { background: #ff5c7a; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: #0f3460;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 20px; cursor: pointer;
+    }
+    #qrcode {
+      margin-top: 15px;
+    }
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin: 15px 0;
+    }
+    .seat {
+      width: 40px; height: 40px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #21e6c1;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .seat.occupied {
+      background: red;
+      cursor: not-allowed;
+    }
+    .seat:hover:not(.occupied) {
+      background: #1b9aaa;
+    }
+    select {
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎬 Cine Virtual</h1>
+    <p>Reservá tus entradas online</p>
+  </header>
+
+  <div class="container" id="movies"></div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="movieTitle"></h2>
+      <p><strong>Precio:</strong> $1500</p>
+      <p><strong>Métodos de pago:</strong> Efectivo, Tarjeta, MercadoPago</p>
+
+      <label for="horario"><strong>Seleccionar horario:</strong></label>
+      <select id="horario"></select>
+
+      <div class="seats" id="seatsGrid"></div>
+
+      <button onclick="confirmReservation()">Confirmar y Generar QR</button>
+      <div id="qrcode"></div>
+    </div>
+  </div>
+
+  <!-- Librería QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    const movies = [
+      { id: 1, title: "Deadpool & Wolverine", img: "https://m.media-amazon.com/images/I/81pP2U8K8nL._AC_SY679_.jpg" },
+      { id: 2, title: "Dune 2", img: "https://m.media-amazon.com/images/I/91pM2ymlkML._AC_SY679_.jpg" },
+      { id: 3, title: "Oppenheimer", img: "https://m.media-amazon.com/images/I/81U4qD8uTfL._AC_SY679_.jpg" },
+      { id: 4, title: "Barbie", img: "https://m.media-amazon.com/images/I/81zL6xqk0ZL._AC_SY679_.jpg" },
+      { id: 5, title: "Spider-Man: Across the Spider-Verse", img: "https://m.media-amazon.com/images/I/91KkWf50SoL._AC_SY679_.jpg" }
+    ];
+
+    const horarios = ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"];
+
+    let selectedMovie = null;
+    let selectedSeat = null;
+    let seats = {};
+
+    // Inicializar asientos para cada película
+    movies.forEach(m => {
+      seats[m.id] = Array.from({length: 31}, (_, i) => ({ num: i, occupied: false }));
+    });
+
+    // Renderizar películas
+    const container = document.getElementById("movies");
+    movies.forEach(m => {
+      const div = document.createElement("div");
+      div.classList.add("card");
+      div.innerHTML = `
+        <img src="${m.img}" alt="${m.title}">
+        <h2>${m.title}</h2>
+        <button onclick="openModal(${m.id})">Reservar</button>
+      `;
+      container.appendChild(div);
+    });
+
+    function openModal(movieId) {
+      selectedMovie = movieId;
+      selectedSeat = null;
+
+      document.getElementById("movieTitle").innerText = movies.find(m => m.id === movieId).title;
+      document.getElementById("modal").style.display = "flex";
+      document.getElementById("qrcode").innerHTML = "";
+
+      // Llenar horarios
+      const horarioSelect = document.getElementById("horario");
+      horarioSelect.innerHTML = "";
+      horarios.forEach(h => {
+        const opt = document.createElement("option");
+        opt.value = h;
+        opt.innerText = h;
+        horarioSelect.appendChild(opt);
+      });
+
+      renderSeats();
+    }
+
+    function renderSeats() {
+      const seatsGrid = document.getElementById("seatsGrid");
+      seatsGrid.innerHTML = "";
+      seats[selectedMovie].forEach(seat => {
+        const div = document.createElement("div");
+        div.classList.add("seat");
+        if (seat.occupied) div.classList.add("occupied");
+        div.innerText = seat.num;
+        div.onclick = () => {
+          if (!seat.occupied) {
+            selectedSeat = seat.num;
+            seats[selectedMovie] = seats[selectedMovie].map(s =>
+              s.num === seat.num ? {...s, occupied: true} : s
+            );
+            renderSeats();
+          }
+        };
+        seatsGrid.appendChild(div);
+      });
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function confirmReservation() {
+      if (selectedSeat !== null) {
+        let code = "Pelicula-" + selectedMovie + "-Butaca-" + selectedSeat + "-Horario-" + document.getElementById("horario").value;
+        new QRCode(document.getElementById("qrcode"), {
+          text: code,
+          width: 150,
+          height: 150
+        });
+      } else {
+        alert("Debes seleccionar una butaca antes de confirmar");
+      }
+    }
+  </script>
+</body>
+</html>
