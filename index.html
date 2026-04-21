@@ -1,150 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Mi Página Web</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      color: #ffffff;
-      background: radial-gradient(circle at top left, #1a1a2e, #16213e);
-    }
+<meta charset="UTF-8">
+<title>Para Mi Amor ❤️</title>
 
-    header {
-      background-color: #0f0f1a;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 0 10px #000;
-    }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(45deg, #ff6b81, #ffb6c1);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
 
-    header i {
-      font-size: 1.5em;
-      color: #00ffcc;
-    }
+/* Animación de entrada */
+.contenedor {
+    text-align: center;
+    color: white;
+    animation: aparecer 2s ease-in-out;
+}
 
-    header h1 {
-      font-size: 1.2em;
-      margin: 0;
-      color: #00ffcc;
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-    nav {
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      backdrop-filter: blur(5px);
-    }
+h1 {
+    font-size: 40px;
+}
 
-    nav a {
-      color: #00ffcc;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 8px 14px;
-      border-radius: 8px;
-      transition: background 0.3s;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+p {
+    font-size: 20px;
+}
 
-    nav a:hover {
-      background-color: #00ccaa;
-      color: #000;
-    }
+/* Botón */
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background: white;
+    color: #ff6b81;
+    font-size: 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-    section {
-      display: none;
-      opacity: 0;
-      max-width: 800px;
-      margin: 40px auto;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
-      padding: 30px 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      text-align: center;
-      transition: opacity 0.5s ease;
-    }
+button:hover {
+    background: #ff6b81;
+    color: white;
+}
 
-    section.visible {
-      display: block;
-    }
+/* Corazones animados */
+.corazon {
+    position: absolute;
+    color: red;
+    font-size: 20px;
+    animation: flotar 5s linear infinite;
+}
 
-    section.fade-in {
-      opacity: 1;
+@keyframes flotar {
+    0% {
+        transform: translateY(100vh);
+        opacity: 1;
     }
+    100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+</style>
 
-    section h1 {
-      margin-bottom: 15px;
-      font-size: 1.8em;
-      color: #00ffcc;
-    }
-
-    a.link {
-      color: #00ffcc;
-      font-weight: bold;
-    }
-  </style>
 </head>
+
 <body>
 
-  <header>
-    <i class="fas fa-code"></i>
-    <h1>Santi Web</h1>
-  </header>
+<div class="contenedor">
+    <h1>Para Ti ❤️</h1>
+    <p>Eres lo mejor que me pasó en la vida</p>
+    <button onclick="mensaje()">Haz clic 💌</button>
+</div>
 
-  <nav>
-    <a onclick="mostrar('inicio')"><i class="fas fa-home"></i> Inicio</a>
-    <a onclick="mostrar('sobre')"><i class="fas fa-user"></i> Sobre mí</a>
-    <a onclick="mostrar('proyectos')"><i class="fas fa-folder-open"></i> Proyectos</a>
-    <a onclick="mostrar('contacto')"><i class="fas fa-envelope"></i> Contacto</a>
-  </nav>
+<script>
+function mensaje() {
+    alert("Te amo muchísimo 💖");
+}
 
-  <section id="inicio" class="visible fade-in">
-    <h1>Bienvenido</h1>
-    <p>Hola, soy Santi. Esta es mi primera página web creada desde Termux.</p>
-  </section>
+/* Crear corazones */
+setInterval(() => {
+    let corazon = document.createElement("div");
+    corazon.classList.add("corazon");
+    corazon.innerHTML = "❤️";
+    corazon.style.left = Math.random() * 100 + "vw";
+    corazon.style.fontSize = Math.random() * 20 + 10 + "px";
 
-  <section id="sobre">
-    <h1>Sobre mí</h1>
-    <p>Tengo 22 años, vivo en Tucumán y me apasiona la tecnología y la programación.</p>
-  </section>
+    document.body.appendChild(corazon);
 
-  <section id="proyectos">
-    <h1>Mis Proyectos</h1>
-    <p>Estoy aprendiendo a desarrollar sitios web desde cero. Pronto compartiré algunos ejemplos acá.</p>
-  </section>
-
-  <section id="contacto">
-    <h1>Contacto</h1>
-    <p>Podés escribirme por <a class="link" href="https://instagram.com/santi_palma20" target="_blank">Instagram</a>.</p>
-  </section>
-
-  <script>
-    function mostrar(id) {
-      const secciones = document.querySelectorAll('section');
-      secciones.forEach(s => {
-        s.classList.remove('fade-in');
-        s.classList.remove('visible');
-      });
-
-      const activa = document.getElementById(id);
-      activa.classList.add('visible');
-      setTimeout(() => {
-        activa.classList.add('fade-in');
-      }, 10);
-    }
-  </script>
+    setTimeout(() => {
+        corazon.remove();
+    }, 5000);
+}, 300);
+</script>
 
 </body>
 </html>
