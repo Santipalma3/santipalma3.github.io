@@ -14,7 +14,7 @@ body {
     overflow-x: hidden;
 }
 
-/* INTRO CARTA */
+/* 💌 CARTA INICIO */
 #inicio {
     position: fixed;
     width: 100%;
@@ -40,33 +40,36 @@ body {
     padding: 20px;
 }
 
-/* FRASE */
+/* FRASES */
 #frase {
     margin-top: 10px;
 }
 
-/* GALERIA */
-.galeria {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px;
+/* 🎞 SLIDER */
+.slider {
     margin-top: 20px;
-    padding: 10px;
 }
 
-.galeria img {
-    width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s;
+.slider img {
+    width: 250px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* BOTONES */
+button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    background: white;
+    color: #ff4d6d;
+    font-size: 16px;
     cursor: pointer;
 }
 
-.galeria img:hover {
-    transform: scale(1.05);
-}
-
-/* MODAL */
+/* MODAL ZOOM */
 #modal {
     position: fixed;
     display: none;
@@ -86,19 +89,7 @@ body {
     border-radius: 15px;
 }
 
-/* BOTONES */
-button {
-    margin-top: 15px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 25px;
-    background: white;
-    color: #ff4d6d;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* CORAZONES */
+/* ❤️ CORAZONES */
 .heart {
     position: fixed;
     top: -10px;
@@ -110,19 +101,23 @@ button {
     to { transform: translateY(100vh); }
 }
 
-/* FLORES */
+/* 🌸 FLORES */
 .flower {
     position: fixed;
     top: -10px;
     animation: fall 4s linear;
-    font-size: 18px;
+}
+
+/* fade simple */
+.fade {
+    opacity: 0;
 }
 </style>
 </head>
 
 <body>
 
-<!-- CARTA INICIO -->
+<!-- 💌 CARTA -->
 <div id="inicio">
     <div class="carta">
         <h2>💌 Toca para entrar</h2>
@@ -139,21 +134,13 @@ button {
 
     <p>Desde que llegaste a mi vida todo es mejor...</p>
 
-    <!-- BOTÓN MÚSICA -->
     <button onclick="document.getElementById('musica').play()">
         🎵 Reproducir música
     </button>
 
-    <!-- GALERÍA -->
-    <div class="galeria">
-
-        <img src="fotos/IMG-20260419-WA0020.jpg" onclick="abrir(this)">
-        <img src="fotos/IMG-20260419-WA0021.jpg" onclick="abrir(this)">
-        <img src="fotos/IMG-20260419-WA0022.jpg" onclick="abrir(this)">
-        <img src="fotos/IMG-20260419-WA0023.jpg" onclick="abrir(this)">
-        <img src="fotos/IMG-20260419-WA0024.jpg" onclick="abrir(this)">
-        <img src="fotos/IMG-20260419-WA0025.jpg" onclick="abrir(this)">
-
+    <!-- 🎞 SLIDESHOW -->
+    <div class="slider">
+        <img id="slide" src="fotos/IMG-20260419-WA0020.jpg">
     </div>
 
 </div>
@@ -170,20 +157,12 @@ button {
 
 <script>
 
+/* abrir carta */
 function abrirPagina() {
     document.getElementById("inicio").style.display = "none";
 }
 
-function abrir(img) {
-    document.getElementById("modal").style.display = "flex";
-    document.getElementById("imgModal").src = img.src;
-}
-
-function cerrar() {
-    document.getElementById("modal").style.display = "none";
-}
-
-/* FRASES */
+/* frases */
 const frases = [
 "Te amo ❤️",
 "Eres mi todo 💕",
@@ -191,14 +170,41 @@ const frases = [
 "No hay nadie como tú 💖"
 ];
 
-let i = 0;
-
+let f = 0;
 setInterval(() => {
-    i = (i + 1) % frases.length;
-    document.getElementById("frase").innerText = frases[i];
+    f = (f + 1) % frases.length;
+    document.getElementById("frase").innerText = frases[f];
 }, 3000);
 
-/* CORAZONES */
+/* SLIDER */
+const fotos = [
+"fotos/IMG-20260419-WA0020.jpg",
+"fotos/IMG-20260419-WA0021.jpg",
+"fotos/IMG-20260419-WA0022.jpg",
+"fotos/IMG-20260419-WA0023.jpg",
+"fotos/IMG-20260419-WA0024.jpg",
+"fotos/IMG-20260419-WA0025.jpg",
+"fotos/IMG-20260419-WA0026.jpg",
+"fotos/IMG-20260419-WA0027.jpg",
+"fotos/IMG-20260419-WA0028.jpg",
+"fotos/IMG-20260419-WA0029.jpg"
+];
+
+let i = 0;
+const slide = document.getElementById("slide");
+
+setInterval(() => {
+    slide.classList.add("fade");
+
+    setTimeout(() => {
+        i = (i + 1) % fotos.length;
+        slide.src = fotos[i];
+        slide.classList.remove("fade");
+    }, 400);
+
+}, 3000);
+
+/* corazones */
 function crearCorazon() {
     const h = document.createElement("div");
     h.classList.add("heart");
@@ -210,7 +216,7 @@ function crearCorazon() {
 }
 setInterval(crearCorazon, 300);
 
-/* FLORES */
+/* flores */
 function crearFlor() {
     const f = document.createElement("div");
     f.classList.add("flower");
