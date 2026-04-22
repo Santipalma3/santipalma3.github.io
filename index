@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Mi Amor ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(45deg, #ff6b81, #ffb6c1);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Animación de entrada */
+.contenedor {
+    text-align: center;
+    color: white;
+    animation: aparecer 2s ease-in-out;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    font-size: 40px;
+}
+
+p {
+    font-size: 20px;
+}
+
+/* Botón */
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background: white;
+    color: #ff6b81;
+    font-size: 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #ff6b81;
+    color: white;
+}
+
+/* Corazones animados */
+.corazon {
+    position: absolute;
+    color: red;
+    font-size: 20px;
+    animation: flotar 5s linear infinite;
+}
+
+@keyframes flotar {
+    0% {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+    <h1>Para Ti ❤️</h1>
+    <p>Eres lo mejor que me pasó en la vida</p>
+    <button onclick="mensaje()">Haz clic 💌</button>
+</div>
+
+<script>
+function mensaje() {
+    alert("Te amo muchísimo 💖");
+}
+
+/* Crear corazones */
+setInterval(() => {
+    let corazon = document.createElement("div");
+    corazon.classList.add("corazon");
+    corazon.innerHTML = "❤️";
+    corazon.style.left = Math.random() * 100 + "vw";
+    corazon.style.fontSize = Math.random() * 20 + 10 + "px";
+
+    document.body.appendChild(corazon);
+
+    setTimeout(() => {
+        corazon.remove();
+    }, 5000);
+}, 300);
+</script>
+
+</body>
+</html>
