@@ -1,4 +1,4 @@
-<!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -121,7 +121,6 @@ button {
 
     <p>Desde que llegaste a mi vida todo es mejor...</p>
 
-    <!-- 🎵 MÚSICA (oculta, se activa al abrir carta) -->
     <audio id="musica" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
@@ -132,12 +131,17 @@ button {
 
 <script>
 
-/* 💌 ABRIR CARTA + MÚSICA */
+/* 💌 FIX DEFINITIVO DE CARTA */
 function abrirPagina() {
-    document.getElementById("inicio").style.display = "none";
+    const carta = document.getElementById("inicio");
+    if (carta) carta.style.display = "none";
 
     const audio = document.getElementById("musica");
-    audio.play();
+    if (audio) {
+        audio.play().catch(() => {
+            console.log("Autoplay bloqueado, pero listo para tocar");
+        });
+    }
 }
 
 /* FRASES */
@@ -154,7 +158,7 @@ setInterval(() => {
     document.getElementById("frase").innerText = frases[f];
 }, 3000);
 
-/* 📸 FOTOS */
+/* FOTOS */
 const fotos = [
 "fotos/IMG-20260419-WA0020.jpg",
 "fotos/IMG-20260419-WA0021.jpg",
@@ -183,10 +187,7 @@ function agregarFoto() {
 
 setInterval(agregarFoto, 1500);
 
-/* ❤️ CORAZONES */
-function crearCorazon() {
-    const h = document.createElement("div");
-    h.classList.add("heart");
-    h.innerHTML = "❤️";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.animationDuration = (2 + Math.random() * 3) + "s";
+</script>
+
+</body>
+</html>
