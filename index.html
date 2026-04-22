@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -121,10 +121,7 @@ button {
 
     <p>Desde que llegaste a mi vida todo es mejor...</p>
 
-    <button onclick="document.getElementById('musica').play()">
-        🎵 Reproducir música
-    </button>
-
+    <!-- 🎵 MÚSICA (oculta, se activa al abrir carta) -->
     <audio id="musica" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
@@ -135,13 +132,15 @@ button {
 
 <script>
 
-/* ✔️ FIX REAL DE LA CARTA */
+/* 💌 ABRIR CARTA + MÚSICA */
 function abrirPagina() {
     document.getElementById("inicio").style.display = "none";
-    document.body.style.overflow = "auto";
+
+    const audio = document.getElementById("musica");
+    audio.play();
 }
 
-/* frases */
+/* FRASES */
 const frases = [
 "Te amo ❤️",
 "Eres mi todo 💕",
@@ -155,7 +154,7 @@ setInterval(() => {
     document.getElementById("frase").innerText = frases[f];
 }, 3000);
 
-/* fotos */
+/* 📸 FOTOS */
 const fotos = [
 "fotos/IMG-20260419-WA0020.jpg",
 "fotos/IMG-20260419-WA0021.jpg",
@@ -184,31 +183,10 @@ function agregarFoto() {
 
 setInterval(agregarFoto, 1500);
 
-/* corazones */
+/* ❤️ CORAZONES */
 function crearCorazon() {
     const h = document.createElement("div");
     h.classList.add("heart");
     h.innerHTML = "❤️";
     h.style.left = Math.random() * 100 + "vw";
     h.style.animationDuration = (2 + Math.random() * 3) + "s";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 5000);
-}
-setInterval(crearCorazon, 300);
-
-/* flores */
-function crearFlor() {
-    const f = document.createElement("div");
-    f.classList.add("flower");
-    f.innerHTML = "🌸";
-    f.style.left = Math.random() * 100 + "vw";
-    f.style.fontSize = (10 + Math.random() * 20) + "px";
-    document.body.appendChild(f);
-    setTimeout(() => f.remove(), 4000);
-}
-setInterval(crearFlor, 500);
-
-</script>
-
-</body>
-</html>
